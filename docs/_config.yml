@@ -8,7 +8,7 @@ url: "https://yenanxu.github.io"
 
 # Secondary Parameters
 baseurl: "/Predicting_Crime"
-header-img: "img/head_image.jpg"
+header-img: "img/home-bg.jpg"
 headercolor: "#FFFFFF"
 
 # Tertiary Parameters
@@ -35,7 +35,7 @@ defaults:
       type: "pages"
     values:
       layout: "project"
-      header-img: "img/head_image.jpg"
+      header-img: "img/home-bg.jpg"
 
 # Prose Settings
 prose:
