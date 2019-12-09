@@ -8,7 +8,7 @@ url: "https://yenanxu.github.io"
 
 # Secondary Parameters
 baseurl: "/Predicting_Crime"
-header-img: img/head_image.jpg
+header-img: "img/head_image.jpg"
 headercolor: "#FFFFFF"
 
 # Tertiary Parameters
