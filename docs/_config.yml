@@ -1,21 +1,20 @@
 # Site settings
 title: Project Pages
 description: "An Integrated Scientific Blogging Template"
-url: "https://yueli1201.github.io"
+url: "https://yenanxu.github.io"
 
 
 
 
 # Secondary Parameters
-baseurl: "/Alzheimer"
-header-img: img/home-bg.jpg
+baseurl: "/Predicting_Crime"
+header-img: img/head_image.jpg
 headercolor: "#FFFFFF"
-logo: /Alzheimer/img/logos/Project-Pages-New-Logo-Inverted.png
 
 # Tertiary Parameters
-github_username:  yueli1201
-project_repository: Alzheimer
-disqus_shortname: Alzheimer
+github_username:  yenanxu
+project_repository: Predicting_Crime
+disqus_shortname: Predicting_Crime
 g-analytics: UA-75881392-1
 altmetric: true
 
@@ -36,12 +35,12 @@ defaults:
       type: "pages"
     values:
       layout: "project"
-      header-img: "img/home-bg.jpg"
+      header-img: "img/head_image.jpg"
 
 # Prose Settings
 prose:
   ignore: ['feed.xml', '/stl', '/ply', '/js', '/plugin', '/lib', '/projectors', '_layouts', '/_includes', 'Gruntfile.js', 'package.json', 'proselinks.jsonp', 'ppanchor.matin', '.gitignore', '/search', '/css', '/img', 'favicon.png','_data/*.json','LICENSES.md','README.md','colorscheme.scss','members.html','mentions.html','index.md']
-  siteurl: 'http://yueli1201.github.io/Alzheimer/'
+  siteurl: 'https://yenanxu.github.io/Predicting_Crime/'
   ispp: true
   media: 'img'
   metadata:
