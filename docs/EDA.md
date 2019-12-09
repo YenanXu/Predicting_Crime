@@ -67,11 +67,12 @@ ax.set_ylabel('Number of Incidents');
 ```python
 df_final.head()
 ```
-   | INCIDENT_NUMBER | OFFENSE_CODE	
--- | --------------- | ------------ 
-0  | I192078623      | 3802        
 
-
+|   | INCIDENT_NUMBER | OFFENSE_CODE | OFFENSE_CODE_GROUP              | OFFENSE_DESCRIPTION            |
+|---|-----------------|--------------|---------------------------------|--------------------------------|
+| 0 | I192078623      | 3802         | Motor Vehicle Accident Response | M/V ACCIDENT - PROPERTY DAMAGE |
+|   |                 |              |                                 |                                |
+|   |                 |              |                                 |                                |
 
 
 
