@@ -15,18 +15,18 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-          //{% if site.github.is_project_page %}
+          {% if site.github.is_project_page %}
             <a id="forkme_banner" href="{{ site.github.repository_url }}">EDA</a>
             <a id="forkme_banner" href="{{ site.github.repository_url }}">Models</a>
-          //{% endif %}
+          {% endif %}
 
           <h1 id="project_title">{{ Predicting Types of Crime }}</h1>
           <h2 id="project_tagline">{{ site.description | default: site.github.project_tagline }}</h2>
 
           {% if site.show_downloads %}
             <section id="downloads">
-              <a class="zip_download_link" href="{{ site.github.zip_url }}">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="{{ site.github.tar_url }}">Download this project as a tar.gz file</a>
+              <a class="zip_download_link" href="{{ site.github.zip_url }}">EDA</a>
+              <a class="tar_download_link" href="{{ site.github.tar_url }}">Models</a>
             </section>
           {% endif %}
         </header>
@@ -42,13 +42,13 @@
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        {% if site.github.is_project_page %}
+        //{% if site.github.is_project_page %}
         <p class="copyright">{{ site.title | default: site.github.repository_name }} maintained by 
         <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>
         <a href="{{ https://github.com/xenaka/cs109_final_project }}">{{ Qian Xiao }}</a>
         <a href="{{ site.github.owner_url }}">{{ Crystal Ma }}</a>
         </p>
-        {% endif %}
+        //{% endif %}
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
