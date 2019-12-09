@@ -1,7 +1,7 @@
 ---
 layout: page
-title: "Literature Review"
-description: "Literature review and related work"
+title: "EDA"
+description: "Exploratory data analysis"
 header-img: "img/home-bg.jpg"
 ---
 
