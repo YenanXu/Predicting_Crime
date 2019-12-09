@@ -1,196 +1,91 @@
 ---
 layout: page
 title: "EDA"
-description: "Exploratory data analysis"
+description: "Exploratory Data Analysis"
 header-img: "img/home-bg.jpg"
 ---
 
-#### _The general EDA questions we want to explore are:_
-#### _How do distributions of covariates vary among CN, MCI and AD?_
-#### _What variables contribute significantly to the classification of AD, MCI, and CN?_
+#### _In this part, the location data provided in four datasets will first be associated using geospatial labels such as zipcodes, street names and coordinates. Exploratory data analysis will then be performed to show the geographic distribution of the main focus (crime types, street light etc.). The correlation among covariates and the distributions of covariates for six different crime types will also be examined in order to choose better predictors for the models._
 
 ## Data Description
 
-We use data from ADNI dataset. This dataset is a longitudinal dataset, participants were carried forward from previous phases for continued monitoring while new enrollees were added with each phase to further investigate the evolution of AD. Participants of the study are between 55 to 90 years old, who are from 57 sites in the US and Canada. Participants would go through a series of initial tests and take repeated at intervals over subsequent years. Tests include clinical evaluation, neuropsychological tests, genetic testing, lumbar puncture, and MRI and PET scans. In this dataset, clinical data are obtained on for ADNI protocols, ADNI 1, ADNI 2, ADNI 3, ADNI GO, which comprise clinical information about each subject including recruitment, demographics, physical examinations, and cognitive assessment data, etc. Although they are not all the same regarding the date and completeness of measurement, as we are mainly focused on baseline biological and medical data and screening data for demographic, neurological exams, screening labs, vital signs, etc., which are almost complete for the four protocols, we do not differentiate different ADNI protocols when analyzing the data.
+Data of this project was extracted from the following datasets:
+1. [Crime Incident Reports Dataset](https://data.boston.gov/dataset/crime-incident-reports-august-2015-to-date-source-new-system) provided by Boston Police Department(BPD)
+- The 2015 Crime incident datasets is 77 Mb with 440,045 observation and 17 columns. This dataset captures important information about crime type, location, time, etc.
+2. [Property Assessment Dataset](https://data.boston.gov/dataset/property-assessment) that gives property, or parcel, ownership together with value information in Boston, published by the Department of Innovation and Technology.
+- The 2019 (fiscal year) Property Assessment Dataset is 44 Mb with 174,668 observations and 75 columns, including information about address, property type, value, area and other details.
+- Variables description is provided on _Analyze Boston_
+3. [Street Lights Dataset](https://data.boston.gov/dataset/streetlight-locations) maintained by The Street Lighting Division of Public Works
+4. [Census ZIP Code Demographic Profile Dataset](https://www.nber.org/data/census-2010-zip-code-data.html)
+- Selected economic statistics from Census 2010 ZIP Code Tabulation Area Demographic Profile Summary File. Variables include ZIP code, Total population, Population density, Population by female, Population by age, median household income which represents district socioeconomic status.
 
-## Variables and Observations Cleaning
-For the use of exploratory data analysis (EDA), we first deleted observations that are not baseline values and observations that the response value ‘DX’ is missing. Since we just included necessary, not repetitive, baseline data and non-patient reported data, we dropped 58 variables inclduing ‘PTID’, ’SITE’, ‘COLPROT’, ‘ORIGPROT’, ‘EXAMDATE’, and all variables do not end with ‘bl’, ‘RID’, ‘Month’, ‘M’, ‘updated_stamp’, ‘FLDSTRNG’, ‘FSVERSION’, and all Ecog test results by the patients. Moreover, considering the completeness of data, we dropped variables that have missing values more than 80%. 
 
-```python
-df = pd.read_csv('ADNIMERGE.csv')
-```
-```python
-#keep only the baseline value for all the variables. (also deleting "VISCODE")
-df2 = {}
-var = list(df.columns.drop('VISCODE'))
-for i in var:
-    df2[i] = df[i][df['VISCODE'] == 'bl']
-df2 = pd.DataFrame(df2)
-print(len(df)-len(df2), 'observation deleted. And variable "VISCODE" is deleted.')
 
-#drop the observation if 'DX' is missing
-df3 = {}
-var = list(df2.columns.drop('DX'))
-for i in var:
-    df3[i] = df2[i][df2['DX'].isnull() == False]
-df2['DX'].fillna(-1, inplace = True)
-df2_DX = list(df2['DX'])
-while -1 in df2_DX:
-    df2_DX.remove(-1)
-df3['DX'] = df2_DX
-df3 = pd.DataFrame(df3)
-print(len(df2)-len(df3), 'observation deleted.')
-print(len(df3), 'observations left.')
-```
-```python
-#drop variables that are selected based on the criteria above
-bad = ['PTID','SITE','COLPROT','ORIGPROT', 'EXAMDATE', 'DX_bl', 'EXAMDATE_bl', 
-       'CDRSB_bl', 'ADAS11_bl', 'ADAS13_bl', 'MMSE_bl', 'RAVLT_immediate_bl', 'RAVLT_learning_bl', 'RAVLT_forgetting_bl', 
-       'RAVLT_perc_forgetting_bl', 'FAQ_bl','FLDSTRENG_bl', 'FSVERSION_bl', 'Ventricles_bl', 'Hippocampus_bl', 
-       'WholeBrain_bl', 'Entorhinal_bl', 'Fusiform_bl', 'MidTemp_bl', 'ICV_bl', 'MOCA_bl', 'EcogPtMem_bl', 'EcogPtLang_bl', 
-       'EcogPtVisspat_bl', 'EcogPtPlan_bl', 'EcogPtOrgan_bl', 'EcogPtDivatt_bl', 'EcogPtTotal_bl', 'EcogSPMem_bl', 'EcogSPLang_bl', 
-       'EcogSPVisspat_bl', 'EcogSPPlan_bl', 'EcogSPOrgan_bl', 'EcogSPDivatt_bl', 'EcogSPTotal_bl', 'FDG_bl', 'PIB_bl', 'AV45_bl', 
-       'Years_bl', 'Month_bl', 'RID', 'Month', 'M', 'update_stamp', 'FLDSTRENG', 'FSVERSION','EcogPtMem', 'EcogPtLang', 'EcogPtVisspat', \
-       'EcogPtPlan', 'EcogPtOrgan', 'EcogPtDivatt', 'EcogPtTotal']
-df4 = df3.drop(bad, axis = 1)
-print(len(list(df3.columns))-len(list(df4.columns)), 'variables are deleted.')
-print('Remaining variables are:', list(df4.columns))
-```
-```python
-#Turn all values of categorical variables into categories named in 0, 1, 2, 3...while keeping NaN and turining all 'Unknown's to NaN
+## Data Cleaning
 
-cat = [] #list of names of categorical variables
-catdict_raw = {} #dictionary with names of categorical variables as keys, and all categories as values, including nan & 'Unknown'
-catdict = {} #dictionary with names of categorical variables as keys, and non-nan categories as values (excluding nan & 'Unknown')
+#### Crime Incident Reports Dataset
+The `Crime_Type` of the final data was obtained from the BPD Crime incident reports. We have defined six crime types for prediction by merging similar offense code groups: theft (merging 'Commercial Burglary', 'Auto Theft', 'Other Burglary', 'Larceny', 'Burglary – No Property Taken', 'Larceny From Motor Vehicle', 'Residential Burglary'), robbery ('Robbery'), assault (merging 'Aggravated Assault', 'Harassment', 'Criminal Harassment', 'Simple Assault'), vandalism ('Vandalism'), motor/vehicle accident('Motor Vehicle Accident Response') and drug abuse violations('Drug Violation'). Each crime type was labeled by a different number, with theft as 0, robbery as 1, assault as 2, vandalism as 3, motor/vehicle accident as 4 and drug abuse violations as 5. Since we are interested in the relationship between street lighting and crime type occurred in Boston, the crime incidents were only included if they took place when street lights are on. Whether Boston street lights are turned on or not is based on ambient light. We checked the sunset time and set different time boundaries across months of the year to ensure that the crime incidents in our dataset fall in the “dark time” of the day. More specifically, the time intervals were restricted within 5:00pm-6:00am for November to February, 7:30pm-5:00am for September, October, March and April, and 8:30pm-4:00am for May to August. For the purpose of connecting with the Property Assessment Dataset, the first, second and last (suffix) words were obtained from `STREET` and double-checked by eyeball to be consistent with those variables in the _Property Assessment Dataset_. The number of observations was reduced to 148,467 after restriction and cleaning.
 
-#convert 'APOE4' to string, because it is categorical but will be regarded as continuous later.
-df5 = {}
-df5['APOE4'] = [-1]*len(df4['APOE4'])
-for i in range(len(df4['APOE4'])):
-    if list(df4['APOE4'])[i] != np.nan:
-        df5['APOE4'][i] = str(list(df4['APOE4'])[i])
+#### Property Assessment Dataset
+The _Property Assessment Dataset_ was first explored on missing values. Observations with missing geographic information that is required to merge datasets (`ST_NAME` and `ZIPCODE`) were dropped. We only kept quantitative variables with missing values no more than 50% for subsequent analysis. For better matching, the `ZIPCODE` variable was transformed from float type to string and the first and second words of `ST_NAME` were extracted to new variables. The new street name related variables were double-checked by eyeball to be consistent with those variables in the Crime Dataset. The state class code `PTYPE` was categorized into ‘Multiple Use Property’, ‘Residential Property’, ‘Apartment Property’, ‘Commercial Property’, ‘Industrial Property’, ‘Exempt Ownership’ and ‘Exempt Property Type’ according to the provided _PROPERTY OCCUPANCY CODES TABLE_. The built year and last remodeled year were re-calculated by subtracting the median respectively. At last, the dataset was grouped by street names and prepared for merging.
 
-var = list(df4.columns.drop('APOE4'))
-for i in var:
-    df5[i] = list(df4[i])
-df5 = pd.DataFrame(df5)
-df5['APOE4'].replace(-1, np.nan, inplace = True)
+#### Street Lights Dataset
+From the streetlight locations provided by _The Street Lighting Division of Public Works_, we extracted the geographic coordinates of the lights across Boston. Since the same geographic information can be obtained from the crime incident reports, the **Haversine equation** can be applied to calculate the distance between every single place of crime occurrence and streetlight location.
+- Haversine formula:
+<img src="https://yenanxu.github.io/Predicting_Crime/figures/H_formula.jpg" alt="1" width="750"/>
 
-for v in df5.columns:
-    if df5[v].dtypes == 'O':
-        cat.append(v)
-        catdict_raw[v] = list(set(df5[v]))
-        df5[v].fillna('Unknown', inplace = True) #replace all NaN first into 'Unknown'
-        catdict[v] = list(set(df5[v]))
-        catdict['APOE4'] = [0,1,2]
-        catdict['DX'] = ['CN','MCI','Dementia']
-        if 'Unknown' in catdict[v]:
-            catdict[v].remove('Unknown') #'Unknown' should not participate in categorizing
-        for i in range(len(catdict[v])):
-            df5[v].replace(catdict[v][i], i, inplace = True) #Turn all values of categorical variables into categories named in 0, 1, 2, 3...
-        df5[v] = pd.to_numeric(df5[v], errors = 'coerce') #convert all 'Unknown's then to NaN
-contin = list(df5.columns.drop(cat))
-print('Categorical variables are:', cat, '\n')
-print('Continuous variables are', contin, '\n')
-print('The dictionary for values of categorical variable corresponding to their original names: \n', catdict)
-```
-```python
-#cout the NaNs in each variables, drop variables that has percentage of NaNs over 80%.
-perc = []
-bad2 = []
-for i in list(df5.columns):
-    perc_temp = (1-df5[i].isnull().sum()/len(df5))*100
-    perc.append(perc_temp)
-    if perc_temp < 20:
-        bad2.append(i)
-plt.figure(figsize=(17,5))
-plt.bar(list(df5.columns), perc)
-plt.xticks(list(df5.columns), rotation=90)
-plt.axhline(20, c = 'r')
-plt.ylabel('percent of vaid data (%)')
-plt.show()
-df6 = df5.drop(bad2, axis = 1)
-print(len(list(df5.columns))-len(list(df6.columns)), 'variables are deleted.')
-print('Deleted variables are:', bad2)
-```
+Where $\varphi$ represents latitude, $\lambda$ represents longitude and the subscript marks the location.
 
-<img src="https://yueli1201.github.io/Alzheimer/figures/1.jpeg" alt="1" width="750"/>
-<div align="center"><font size="2"><b>Fig 1. Completeness of dataset after dropping unnecessary variables and observations</b></font></div>
+Columns of the distance to the nearest streetlight, counts of streetlights within 50 and 100 meters for each crime incident were created in the purpose of evaluating the influence of ambient light upon criminal activities.
 
-## Correlation Analysis of Variables
+#### Census ZIP Code Demographic Profile Dataset
+38 ZIP Codes that appeared on _Property Assessment Dataset_ were recorded and were used to extract district socio-economic data from _Census ZIP Code Demographic Profile Dataset_ using the `uszipcode` package. The percentage of younger population (`Young_prop`) is calculated using `Younger Population`/ `Total Population`, where the younger is defined as people who are under 19-years old. Four ZIP Codes did not have information on Census Dataset. Based on our research, ZIP Code boundaries were adjusted in previous years. In 2010, 02112 was contained within 02111 ZIP Code Boundary, 02133 and 02137 were contained within 02136 ZIP Code Boundary. 02201 is a unique - single entity ZIP Code that only include 2 buildings. Therefore, we extrapolated the data of bigger boundary to predict the situation in 02112, 02133, 02137 area. Missing value of 02201 was extrapolated from the nearest district 02109.
 
-Next, we identified continuous and categorical variables and converted the later to numbers for the convenience of further manipulation. To explore the current dataset, we first took a look at the correlations between any pairs of the variables without imputing missing values because the loss of data is small when doing correlation analysis, the probability of two variables either has a NaN is small, so we just delete any pair that either variable has a NaN. And the correlation matrix is drawn as below. 
+#### Merge the datasets
+The _Crime Incident Reports Dataset_ and the _Property Assessment Dataset_ were firstly merged on the combination of the first two words from street name and suffix, and then on the combination of the first word and suffix, lastly on the combination of the first two words to increase our capacity of matching. The _Census ZIP Code Demographic Profile Dataset_ then was merged with the dataset by ZIP codes. The most useful information from _Street Lights Dataset_, `Dist_to_Nearest_Light`, `Lights_within_50m` and `Lights_within_100m` were then calculated. The distribution of crime types from the matched and unmatched data was found to be similar, so 5989 unmatched observations were dropped and the final dataset was reduced to 142,478 observations.
 
 ```python
-import seaborn as sns
-f, ax = plt.subplots(figsize=(10,10))
-corr = df6.corr()
-sns.heatmap(corr, mask=np.zeros_like(corr, dtype=np.bool), cmap=sns.diverging_palette(220, 10, as_cmap=True),
-            square=True, ax=ax)
-plt.show()
+# Check the distribution of crime types for matched and unmatched observations
+fig, ax = plt.subplots(1,1, figsize=(12,8))
+
+unmatched = df_merge_CP[df_merge_CP['ZIPCODE'].isnull()]['Crime_Type']
+matched = df_merge_CP[~df_merge_CP['ZIPCODE'].isnull()]['Crime_Type']
+
+ax.hist(unmatched, bins=np.arange(7)-0.3, density=True, width=0.3, alpha=0.7, label='Unmatched')
+ax.hist(matched, bins=np.arange(7), density=True, width=0.3, alpha=0.7, label='Matched')
+ax.set_xticks([0,1,2,3,4,5])
+ax.set_xticklabels(labels=['Theft', 'Robbery', 'Assault', 'Vandalism', 'M/V Accident', 'Drug Abuse Violations'])
+ax.set_xlim([-0.5, 5.5])
+ax.legend()
+ax.set_xlabel('Crime Type')
+ax.set_ylabel('Number of Incidents');
 ```
 
-<img src="https://yueli1201.github.io/Alzheimer/figures/2.jpeg" alt="2" width="750"/>
-<div align="center"><font size="2"><b>Fig 2. Correlation matrix including missing values after dropping unnecessary variables and observations**</b></font></div>
-
-## Distribution Exploration for Variables Grouped by Disease Status
-
-Next, we plot the distribution of the variable across non-disease control (CN) participants, MCI participants, and AD participants. Shown in the below plots, we could see that AD, MCI, and CN are not very different across age(AGE), education level (PTEDUCAT), and intracerebral volume (ICV). The levels of Average FDG-PET of angular, temporal, and posterior cingulate
-(FDG), Mini-Mental State Examination(MMSE), Hippocampus, WholeBrain, Entorhinal, Fusiform, middle temporal gyrus (MitTemp), etc. are negatively associated with cognitive impairment severity, while the scores of Clinical Dementia Rating-Sum of Boxes (CDRSB), FAQ, Ventricles, etc. are positively associated with cognitive impairment severity.  
+<img src="https://yenanxu.github.io/Predicting_Crime/figures/EDA_1.png" alt="2" width="750"/>
+<div align="center"><font size="2"><b>Fig 1. Distribution of crime types for matched and unmatched observation</b></font></div>
 
 ```python
-continuous = ['AGE', 'PTEDUCAT', 'ICV',
-              'FDG','MMSE','RAVLT_immediate','RAVLT_learning','MOCA', 
-              'Hippocampus', 'WholeBrain', 'Entorhinal', 'Fusiform', 'MidTemp',
-              'AV45', 'CDRSB', 'ADAS11', 'ADAS13',   'RAVLT_forgetting', 'RAVLT_perc_forgetting', 'FAQ', 
-              'EcogSPMem', 'EcogSPLang', 'EcogSPVisspat', 'EcogSPPlan', 'EcogSPOrgan', 'EcogSPDivatt', 
-              'EcogSPTotal', 'Ventricles'] 
-
-fig, ax = plt.subplots(7,4,figsize = (20,30))
-ax = ax.ravel()
-
-for i in range(len(continuous)):
-    sns.boxplot(x=df6['DX'], y=df6[continuous[i]],palette = ['#0343df', 'g', '#e50000'], ax=ax[i])
-    fig.tight_layout()
-    ax[i].set_xticklabels(['CN', 'MCI','AD'])
+df_final.head()
 ```
+ | INCIDENT_NUMBER | OFFENSE_CODE	| OFFENSE_CODE_GROUP | OFFENSE_DESCRIPTION | DISTRICT | REPORTING_AREA | SHOOTING | OCCURRED_ON_DATE | YEAR | MONTH | DAY_OF_WEEK | HOUR | UCR_PART | STREET | Lat | Long | Location | OCCURED_TIME | Crime_Type | Crime_Type_Cat | ST_NAME_1st | ST_NAME_2nd | ST_NAME_SUF | ST_comb | ST_12 | ST_1SUF | ZIPCODE | AV_BLDG | AV_TOTAL | GROSS_TAX | LAND_SF | GROSS_AREA | LIVING_AREA | NUM_FLOORS | PTYPE_A | PTYPE_C | PTYPE_EO | PTYPE_EP | PTYPE_I | PTYPE_MU | PTYPE_R | YR_BUILT_m | YR_REMOD_m | SHOOTING_DUMMY | Land area | Population Density | Median household income | Total Population | Younger Population | Male Population | Young_prop | Dist_to_Nearest_Light | Lights_within_50m | Lights_within_100m
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
+0 | I192078623 | 3802 | Motor Vehicle Accident Response | M/V ACCIDENT - PROPERTY  DAMAGE | C11 | 400 | NaN | 2019-09-28 22:40:00 | 2019 | 9 | Saturday | 22 | Part Three | MONTAGUE ST | 42.286065 | -71.070010 | (42.28606484, -71.07001038) | 1900-01-01 22:40:00 | 4.0 | M/V Accident | MONTAGUE	 | ST | ST | MONTAGUE ST | MONTAGUE ST | MONTAGUE ST | 02124 | 542950.000000 | 707000.000000 | 745177.750000 | 5070.000000 | 4008.500000 | 2602.500000 | 2.125000 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 4.0 | -15.750000 | 14.000000 | 0.0 | 3.00 | 15913.0	| 48841.0 | 47783.0 | 13866.0 | 21824.0 | 0.290187 | 7.813019 | 4 | 13
 
-<img src="https://yueli1201.github.io/Alzheimer/figures/3.jpeg" alt="3" width="750"/>
-<div align="center"><font size="2"><b>Fig 3. Distribution of continuous variables grouped by disease status</b></font></div>
 
-```python
-covariates = ['APOE4', 'PTGENDER', 'PTETHCAT', 'PTRACCAT', 'PTMARRY'] 
-catdict['DX'] = ['CN', 'MCI', 'AD']
-color = ['#0343df', 'g', '#e50000']
-fig, ax = plt.subplots(len(covariates), 3, figsize=(15,20))
-ax = ax.ravel()
-a = 0
-df_temp = df6.copy()
-for i in covariates:
-    for dx in list(set(df_temp['DX'])):
-        count = []
-        for cat in catdict[i]:
-            count.append(sum(df_temp[i][df_temp['DX'] == dx] == catdict[i].index(cat)))
-        ax[a].bar(catdict[i], count, alpha=1, color = color[int(dx)])
-        ax[a].set_xlabel(i)
-        ax[a].set_ylabel('count')
-        ax[a].set_title(catdict['DX'][int(dx)])
-        if i == 'PTRACCAT':
-            ax[a].set_xticklabels(catdict[i], rotation=45)
-        fig.tight_layout()
-        a = a + 1
-```
 
-<img src="https://yueli1201.github.io/Alzheimer/figures/4.jpeg" alt="4" width="750"/>
-<div align="center"><font size="2"><b>Fig 4. Distribution of categorical variables grouped by disease status</b></font></div>
 
-According to the bar charts, the three health status have different distribution on demographic features. AD has a higher distribution in male, non-Hispanic, especially white, married people, and with APOE4=1. However, we are not sure about the determinants of classification yet since the results may due to the sampling method.
+
+
+
+
+
+
 
 ## Covariates Selection and Imputation of Missing Data
 
 We have a longitudinal dataset. But for our classification analysis, we just want to keep the baseline information to build classification models. Because, first, we want to find a cost-efficient way to help the classification of AD. Secondly, in the longitudinal data, the information is highly correlated within each individual. ‘Examdate’, ‘update_stamp’, ‘FLDSTRENG’, ‘FSVERSION’ are not useful for the mdoel because they are not the relavent information of patients. So, we excluded them from our analysis. According many previous publications, the patient everyday cognition scale (Ecog) is very uninformative, especially among those dementia people. So all EcogPt variables were excluded from our analysis. Only very few participants in ADNI1 (less than 5% of the total data) have information on Pittsburgh compound B (PIB) test. Therefore, this variable was excluded from our analysis.
 
-Among the rest of the data, Participants in ADNI1 don’t have information on Everyday Cognition Scale (Ecog), Montreal Cognitive Assessment (MOCA), and AV45. Participants from ADNI3 lack information on APOE4, FDG-PET, AV45, Hippocampus volume, whole brain status, Entorhinal, Fusiform, middle temporal gyrus (MidTemp), intracerebral volume (ICV), Ventricles. But as there are only 46 participants in ADNI3, it will not cause a large proportion missing. There are some other randomly missing data. When combine participants recruited based on four different protocols, we assumed that the data were missing at random.  We used IterativeImputer method in fancyimpute (A strategy for imputing missing values by modeling each feature with missing values as a function of other features in a round-robin fashion) to impute these missing data. 
+Among the rest of the data, Participants in ADNI1 don’t have information on Everyday Cognition Scale (Ecog), Montreal Cognitive Assessment (MOCA), and AV45. Participants from ADNI3 lack information on APOE4, FDG-PET, AV45, Hippocampus volume, whole brain status, Entorhinal, Fusiform, middle temporal gyrus (MidTemp), intracerebral volume (ICV), Ventricles. But as there are only 46 participants in ADNI3, it will not cause a large proportion missing. There are some other randomly missing data. When combine participants recruited based on four different protocols, we assumed that the data were missing at random.  We used IterativeImputer method in fancyimpute (A strategy for imputing missing values by modeling each feature with missing values as a function of other features in a round-robin fashion) to impute these missing data.
 
 ```python
 # Impute missing data
@@ -212,4 +107,4 @@ print(X_train.shape, y_train.shape)
 print(X_test.shape, y_test.shape)
 ```
 
-So now we are ready to explore the two questions using the upcomming regression models and machine learning algorithms. 
+So now we are ready to explore the two questions using the upcomming regression models and machine learning algorithms.
