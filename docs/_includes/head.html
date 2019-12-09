@@ -14,21 +14,21 @@
 
 	<link rel='shortcut icon' type='image/png' href='{{ site.baseurl }}/favicon.png' />
 
-    <title>Predicting Types of Crime</title>
+    <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 
-    <link rel="canonical" href="https://yenanxu.github.io/Predicting_Crime/">
+    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
 	
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="{{ "/css/bootstrap.min.css" | prepend: "https://yenanxu.github.io/Predicting_Crime/" }}">
+    <link rel="stylesheet" href="{{ "/css/bootstrap.min.css" | prepend: site.baseurl | prepend: site.url }}">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ "/css/clean-blog.css" | prepend:  "https://yenanxu.github.io/Predicting_Crime/"  }}">
+    <link rel="stylesheet" href="{{ "/css/clean-blog.css" | prepend: site.baseurl | prepend: site.url }}">
 	
 	<!-- Adjust Colors -->
-    <link rel="stylesheet" href="{{ "/colorscheme.css" | prepend:  "https://yenanxu.github.io/Predicting_Crime/"  }}">
+    <link rel="stylesheet" href="{{ "/colorscheme.css" | prepend: site.baseurl | prepend: site.url }}">
 
     <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="{{ "/css/syntax.css" | prepend:  "https://yenanxu.github.io/Predicting_Crime/"  }}">
+    <link rel="stylesheet" href="{{ "/css/syntax.css" | prepend: site.baseurl | prepend: site.url }}">
 
     <!-- Custom Fonts -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
