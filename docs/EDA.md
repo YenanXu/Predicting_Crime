@@ -68,11 +68,11 @@ ax.set_ylabel('Number of Incidents');
 df_final.head()
 ```
 
-|   | INCIDENT_NUMBER | OFFENSE_CODE | OFFENSE_CODE_GROUP              | OFFENSE_DESCRIPTION            |
-|---|-----------------|--------------|---------------------------------|--------------------------------|
-| 0 | I192078623      | 3802         | Motor Vehicle Accident Response | M/V ACCIDENT - PROPERTY DAMAGE |
-|   |                 |              |                                 |                                |
-|   |                 |              |                                 |                                |
+|   | INCIDENT_NUMBER | OFFENSE_CODE | OFFENSE_CODE_GROUP              | OFFENSE_DESCRIPTION            | DISTRICT | REPORTING_AREA | SHOOTING | OCCURRED_ON_DATE    | YEAR | MONTH | DAY_OF_WEEK | HOUR | UCR_PART   | STREET      |
+|---|-----------------|--------------|---------------------------------|--------------------------------|----------|----------------|----------|---------------------|------|-------|-------------|------|------------|-------------|
+| 0 | I192078623      | 3802         | Motor Vehicle Accident Response | M/V ACCIDENT - PROPERTY DAMAGE | C11      | 400            | NaN      | 2019-09-28 22:40:00 | 2019 | 9     | Saturday    | 22   | Part Three | MONTAGUE ST |
+|   |                 |              |                                 |                                |          |                |          |                     |      |       |             |      |            |             |
+|   |                 |              |                                 |                                |          |                |          |                     |      |       |             |      |            |             |
 
 
 
