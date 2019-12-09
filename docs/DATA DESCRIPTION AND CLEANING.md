@@ -1,12 +1,3 @@
----
-layout: page
-title: "EDA"
-description: "Exploratory Data Analysis"
-header-img: "img/home-bg.jpg"
----
-
-#### _In this part, the location data provided in four datasets will first be associated using geospatial labels such as zipcodes, street names and coordinates. Exploratory data analysis will then be performed to show the geographic distribution of the main focus (crime types, street light etc.). The correlation among covariates and the distributions of covariates for six different crime types will also be examined in order to choose better predictors for the models._
-
 ## Data Description
 
 Data of this project was extracted from the following datasets:
@@ -20,8 +11,9 @@ Data of this project was extracted from the following datasets:
 - Selected economic statistics from Census 2010 ZIP Code Tabulation Area Demographic Profile Summary File. Variables include ZIP code, Total population, Population density, Population by female, Population by age, median household income which represents district socioeconomic status.
 
 
-
 ## Data Cleaning
+
+In this part, the location data provided in four datasets will be associated using geospatial labels such as zipcodes, street names and coordinates.
 
 #### Crime Incident Reports Dataset
 The `Crime_Type` of the final data was obtained from the BPD Crime incident reports. We have defined six crime types for prediction by merging similar offense code groups: theft (merging 'Commercial Burglary', 'Auto Theft', 'Other Burglary', 'Larceny', 'Burglary – No Property Taken', 'Larceny From Motor Vehicle', 'Residential Burglary'), robbery ('Robbery'), assault (merging 'Aggravated Assault', 'Harassment', 'Criminal Harassment', 'Simple Assault'), vandalism ('Vandalism'), motor/vehicle accident('Motor Vehicle Accident Response') and drug abuse violations('Drug Violation'). Each crime type was labeled by a different number, with theft as 0, robbery as 1, assault as 2, vandalism as 3, motor/vehicle accident as 4 and drug abuse violations as 5. Since we are interested in the relationship between street lighting and crime type occurred in Boston, the crime incidents were only included if they took place when street lights are on. Whether Boston street lights are turned on or not is based on ambient light. We checked the sunset time and set different time boundaries across months of the year to ensure that the crime incidents in our dataset fall in the “dark time” of the day. More specifically, the time intervals were restricted within 5:00pm-6:00am for November to February, 7:30pm-5:00am for September, October, March and April, and 8:30pm-4:00am for May to August. For the purpose of connecting with the Property Assessment Dataset, the first, second and last (suffix) words were obtained from `STREET` and double-checked by eyeball to be consistent with those variables in the _Property Assessment Dataset_. The number of observations was reduced to 148,467 after restriction and cleaning.
@@ -32,7 +24,7 @@ The _Property Assessment Dataset_ was first explored on missing values. Observat
 #### Street Lights Dataset
 From the streetlight locations provided by _The Street Lighting Division of Public Works_, we extracted the geographic coordinates of the lights across Boston. Since the same geographic information can be obtained from the crime incident reports, the **Haversine equation** can be applied to calculate the distance between every single place of crime occurrence and streetlight location.
 - Haversine formula:
-<img src="https://yenanxu.github.io/Predicting_Crime/figures/H_formula.jpg" alt="1" width="750"/>
+<img src="https://yenanxu.github.io/Predicting_Crime/figures/H_formula.jpg" alt="1" width="300"/>
 
 Where $\varphi$ represents latitude, $\lambda$ represents longitude and the subscript marks the location.
 
@@ -63,49 +55,3 @@ ax.set_ylabel('Number of Incidents');
 
 <img src="https://yenanxu.github.io/Predicting_Crime/figures/EDA_1.png" alt="2" width="750"/>
 <div align="center"><font size="2"><b>Fig 1. Distribution of crime types for matched and unmatched observation</b></font></div>
-
-```python
-df_final.head()
-```
-
-|   | INCIDENT_NUMBER | OFFENSE_CODE | OFFENSE_CODE_GROUP              | OFFENSE_DESCRIPTION            | DISTRICT | REPORTING_AREA | SHOOTING | OCCURRED_ON_DATE    | YEAR | MONTH | DAY_OF_WEEK | HOUR | UCR_PART   | STREET      |
-|---|-----------------|--------------|---------------------------------|--------------------------------|----------|----------------|----------|---------------------|------|-------|-------------|------|------------|-------------|
-| 0 | I192078623      | 3802         | Motor Vehicle Accident Response | M/V ACCIDENT - PROPERTY DAMAGE | C11      | 400            | NaN      | 2019-09-28 22:40:00 | 2019 | 9     | Saturday    | 22   | Part Three | MONTAGUE ST |
-|   |                 |              |                                 |                                |          |                |          |                     |      |       |             |      |            |             |
-|   |                 |              |                                 |                                |          |                |          |                     |      |       |             |      |            |             |
-
-
-
-
-
-
-
-
-
-## Covariates Selection and Imputation of Missing Data
-
-We have a longitudinal dataset. But for our classification analysis, we just want to keep the baseline information to build classification models. Because, first, we want to find a cost-efficient way to help the classification of AD. Secondly, in the longitudinal data, the information is highly correlated within each individual. ‘Examdate’, ‘update_stamp’, ‘FLDSTRENG’, ‘FSVERSION’ are not useful for the mdoel because they are not the relavent information of patients. So, we excluded them from our analysis. According many previous publications, the patient everyday cognition scale (Ecog) is very uninformative, especially among those dementia people. So all EcogPt variables were excluded from our analysis. Only very few participants in ADNI1 (less than 5% of the total data) have information on Pittsburgh compound B (PIB) test. Therefore, this variable was excluded from our analysis.
-
-Among the rest of the data, Participants in ADNI1 don’t have information on Everyday Cognition Scale (Ecog), Montreal Cognitive Assessment (MOCA), and AV45. Participants from ADNI3 lack information on APOE4, FDG-PET, AV45, Hippocampus volume, whole brain status, Entorhinal, Fusiform, middle temporal gyrus (MidTemp), intracerebral volume (ICV), Ventricles. But as there are only 46 participants in ADNI3, it will not cause a large proportion missing. There are some other randomly missing data. When combine participants recruited based on four different protocols, we assumed that the data were missing at random.  We used IterativeImputer method in fancyimpute (A strategy for imputing missing values by modeling each feature with missing values as a function of other features in a round-robin fashion) to impute these missing data.
-
-```python
-# Impute missing data
-from fancyimpute import KNN, NuclearNormMinimization, SoftImpute, IterativeImputer, BiScaler
-
-X=df6.drop(['DX'], axis=1)
-Y=df6['DX']
-columns = X.columns
-
-X_filled_ii = IterativeImputer().fit_transform(X)
-X_filled_ii = pd.DataFrame(X_filled_ii)
-X_filled_ii.columns = X.columns
-```
-
-```python
-# create training and testing vars
-X_train, X_test, y_train, y_test = train_test_split(X_filled_ii, Y, test_size=0.2)
-print(X_train.shape, y_train.shape)
-print(X_test.shape, y_test.shape)
-```
-
-So now we are ready to explore the two questions using the upcomming regression models and machine learning algorithms.
