@@ -67,9 +67,9 @@ ax.set_ylabel('Number of Incidents');
 ```python
 df_final.head()
 ```
- | INCIDENT_NUMBER | OFFENSE_CODE	| OFFENSE_CODE_GROUP | OFFENSE_DESCRIPTION | DISTRICT | REPORTING_AREA | SHOOTING | OCCURRED_ON_DATE | YEAR | MONTH | DAY_OF_WEEK | HOUR | UCR_PART | STREET | Lat | Long | Location | OCCURED_TIME | Crime_Type | Crime_Type_Cat | ST_NAME_1st | ST_NAME_2nd | ST_NAME_SUF | ST_comb | ST_12 | ST_1SUF | ZIPCODE | AV_BLDG | AV_TOTAL | GROSS_TAX | LAND_SF | GROSS_AREA | LIVING_AREA | NUM_FLOORS | PTYPE_A | PTYPE_C | PTYPE_EO | PTYPE_EP | PTYPE_I | PTYPE_MU | PTYPE_R | YR_BUILT_m | YR_REMOD_m | SHOOTING_DUMMY | Land area | Population Density | Median household income | Total Population | Younger Population | Male Population | Young_prop | Dist_to_Nearest_Light | Lights_within_50m | Lights_within_100m
--- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
-0 | I192078623 | 3802 | Motor Vehicle Accident Response | M/V ACCIDENT - PROPERTY  DAMAGE | C11 | 400 | NaN | 2019-09-28 22:40:00 | 2019 | 9 | Saturday | 22 | Part Three | MONTAGUE ST | 42.286065 | -71.070010 | (42.28606484, -71.07001038) | 1900-01-01 22:40:00 | 4.0 | M/V Accident | MONTAGUE	 | ST | ST | MONTAGUE ST | MONTAGUE ST | MONTAGUE ST | 02124 | 542950.000000 | 707000.000000 | 745177.750000 | 5070.000000 | 4008.500000 | 2602.500000 | 2.125000 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 4.0 | -15.750000 | 14.000000 | 0.0 | 3.00 | 15913.0	| 48841.0 | 47783.0 | 13866.0 | 21824.0 | 0.290187 | 7.813019 | 4 | 13
+ | INCIDENT_NUMBER | OFFENSE_CODE	
+-- | -- | -- 
+0 | I192078623 | 3802
 
 
 
