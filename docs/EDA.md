@@ -75,7 +75,7 @@ ax.set_xlabel('Crime Type')
 ax.set_ylabel('Density of Incidents');
 ```
 
-<img src="https://yenanxu.github.io/Predicting_Crime/figures/missing.png" alt="1" width="600"/>
+<div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/missing.png" alt="1" width="600"/></div>
 <div align="center"><font size="2"><b>Fig 1. Distribution of crime types for missing and unmissing observations</b></font></div>
 
 ## Correlation Analysis
