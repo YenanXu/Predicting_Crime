@@ -11,6 +11,7 @@ Exploratory data analysis will be performed to show the geographic distribution 
 The response variable in our project is the categorical variable `Crime Type`. Each crime type was labeled by a different number, with theft as 0, robbery as 1, assault as 2, vandalism as 3, motor/vehicle accident as 4 and drug abuse violations as 5. All the variables that might potentially be predictors are listed.
 
 <div align="center"><font size="2"><b>Table 1. Potential predictors for models in the final dataset</b></font></div>
+
 | Variable       | Type        | Description                                                                     |
 |----------------|-------------|---------------------------------------------------------------------------------|
 | SHOOTING_DUMMY | Categorical | 1 indicates shooting event involved and 0 indicates no shooting event involved. |
@@ -41,6 +42,7 @@ df_missing
 ```
 
 <div align="center"><font size="2"><b>Table 2. Summary of missing values in the potential predictors</b></font></div>
+
 |             | Count | Proportion |
 |-------------|-------|------------|
 | AV_BLDG     | 284   | 0.001993   |
