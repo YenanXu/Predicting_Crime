@@ -1,3 +1,10 @@
+---
+layout: page
+title: "DATA DESCRIPTION AND CLEANING"
+description: "Data Description and cleaning, prepare for EDA"
+header-img: "img/home-bg.jpg"
+---
+
 ## Data Description
 
 Data of this project was extracted from the following datasets:
@@ -16,7 +23,7 @@ Data of this project was extracted from the following datasets:
 In this part, the location data provided in four datasets will be associated using geospatial labels such as zipcodes, street names and coordinates.
 
 #### Crime Incident Reports Dataset
-The `Crime_Type` of the final data was obtained from the BPD Crime incident reports. We have defined six crime types for prediction by merging similar offense code groups: theft (merging 'Commercial Burglary', 'Auto Theft', 'Other Burglary', 'Larceny', 'Burglary – No Property Taken', 'Larceny From Motor Vehicle', 'Residential Burglary'), robbery ('Robbery'), assault (merging 'Aggravated Assault', 'Harassment', 'Criminal Harassment', 'Simple Assault'), vandalism ('Vandalism'), motor/vehicle accident('Motor Vehicle Accident Response') and drug abuse violations('Drug Violation'). Each crime type was labeled by a different number, with theft as 0, robbery as 1, assault as 2, vandalism as 3, motor/vehicle accident as 4 and drug abuse violations as 5. Since we are interested in the relationship between street lighting and crime type occurred in Boston, the crime incidents were only included if they took place when street lights are on. Whether Boston street lights are turned on or not is based on ambient light. We checked the sunset time and set different time boundaries across months of the year to ensure that the crime incidents in our dataset fall in the “dark time” of the day. More specifically, the time intervals were restricted within 5:00pm-6:00am for November to February, 7:30pm-5:00am for September, October, March and April, and 8:30pm-4:00am for May to August. For the purpose of connecting with the Property Assessment Dataset, the first, second and last (suffix) words were obtained from `STREET` and double-checked by eyeball to be consistent with those variables in the _Property Assessment Dataset_. The number of observations was reduced to 148,467 after restriction and cleaning.
+The `Crime_Type` of the final data was obtained from the BPD Crime incident reports. We have defined six crime types for prediction by merging similar offense code groups: theft (merging 'Commercial Burglary', 'Auto Theft', 'Other Burglary', 'Larceny', 'Burglary – No Property Taken', 'Larceny From Motor Vehicle', 'Residential Burglary'), robbery ('Robbery'), assault (merging 'Aggravated Assault', 'Harassment', 'Criminal Harassment', 'Simple Assault'), vandalism ('Vandalism'), motor/vehicle accident('Motor Vehicle Accident Response') and drug abuse violations('Drug Violation'). Since we are interested in the relationship between street lighting and crime type occurred in Boston, the crime incidents were only included if they took place when street lights are on. Whether Boston street lights are turned on or not is based on ambient light. We checked the sunset time and set different time boundaries across months of the year to ensure that the crime incidents in our dataset fall in the “dark time” of the day. More specifically, the time intervals were restricted within 5:00pm-6:00am for November to February, 7:30pm-5:00am for September, October, March and April, and 8:30pm-4:00am for May to August. For the purpose of connecting with the Property Assessment Dataset, the first, second and last (suffix) words were obtained from `STREET` and double-checked by eyeball to be consistent with those variables in the _Property Assessment Dataset_. The number of observations was reduced to 148,467 after restriction and cleaning.
 
 #### Property Assessment Dataset
 The _Property Assessment Dataset_ was first explored on missing values. Observations with missing geographic information that is required to merge datasets (`ST_NAME` and `ZIPCODE`) were dropped. We only kept quantitative variables with missing values no more than 50% for subsequent analysis. For better matching, the `ZIPCODE` variable was transformed from float type to string and the first and second words of `ST_NAME` were extracted to new variables. The new street name related variables were double-checked by eyeball to be consistent with those variables in the Crime Dataset. The state class code `PTYPE` was categorized into ‘Multiple Use Property’, ‘Residential Property’, ‘Apartment Property’, ‘Commercial Property’, ‘Industrial Property’, ‘Exempt Ownership’ and ‘Exempt Property Type’ according to the provided _PROPERTY OCCUPANCY CODES TABLE_. The built year and last remodeled year were re-calculated by subtracting the median respectively. At last, the dataset was grouped by street names and prepared for merging.
@@ -24,7 +31,7 @@ The _Property Assessment Dataset_ was first explored on missing values. Observat
 #### Street Lights Dataset
 From the streetlight locations provided by _The Street Lighting Division of Public Works_, we extracted the geographic coordinates of the lights across Boston. Since the same geographic information can be obtained from the crime incident reports, the **Haversine equation** can be applied to calculate the distance between every single place of crime occurrence and streetlight location.
 - Haversine formula:
-<img src="https://yenanxu.github.io/Predicting_Crime/figures/H_formula.jpg" alt="1" width="300"/>
+<img src="https://yenanxu.github.io/Predicting_Crime/figures/H_formula.jpg" alt="1" width="400"/>
 
 Where $\varphi$ represents latitude, $\lambda$ represents longitude and the subscript marks the location.
 
@@ -53,5 +60,5 @@ ax.set_xlabel('Crime Type')
 ax.set_ylabel('Number of Incidents');
 ```
 
-<img src="https://yenanxu.github.io/Predicting_Crime/figures/EDA_1.png" alt="2" width="750"/>
-<div align="center"><font size="2"><b>Fig 1. Distribution of crime types for matched and unmatched observation</b></font></div>
+<img src="https://yenanxu.github.io/Predicting_Crime/figures/matched.png" alt="2" width="600"/>
+<div align="center"><font size="2"><b>Fig 1. Distribution of crime types for matched and unmatched observations</b></font></div>
