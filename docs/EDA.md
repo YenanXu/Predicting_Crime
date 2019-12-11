@@ -42,8 +42,7 @@ df_missing
 <div align="center"><font size="2"><b>Table 2. Summary of missing values in the potential predictors</b></font></div>
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/missing_table.png" alt="2" width="400"/></div>
 
-
-\\
+ 
 
 ```python
 missing = df_final.loc[(df_final['GROSS_AREA'].isnull())|
@@ -127,7 +126,7 @@ for i in range(len(continuous)):
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/continuous_box.png" alt="3" width="750"/></div>
 <div align="center"><font size="2"><b>Fig 3. Distribution of continuous variables for different crime types</b></font></div>
 
-\\
+ 
 
 ```python
 # Categorical variables
