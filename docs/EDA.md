@@ -8,7 +8,7 @@ header-img: "img/home-bg.jpg"
 Exploratory data analysis were performed to give a general idea on which variable would potentially be significant in model predicting. Missing values analysis and correlation analysis were also conducted to help with variables selection.
 
 ## Variables Description
-The response variable in our project is the categorical variable `Crime Type`. Each crime type was labeled by a different number, with theft as 0, robbery as 1, assault as 2, vandalism as 3, motor/vehicle accident as 4 and drug abuse violations as 5. All the variables that might potentially be predictors are listed.
+The response variable in our project is the categorical variable `Crime Type`. Each crime type was labeled by a different number, with theft as 0, robbery as 1, assault as 2, vandalism as 3, motor/vehicle accident as 4 and drug abuse violations as 5. All the variables that might potentially be predictors are listed in Table 1.
 
 <div align="center"><font size="2"><b>Table 1. Potential predictors for models in the final dataset</b></font></div>
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/variable_description.png" alt="1" width="500"/></div>
@@ -42,7 +42,7 @@ df_missing
 <div align="center"><font size="2"><b>Table 2. Summary of missing values in the potential predictors</b></font></div>
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/missing_table.png" alt="2" width="400"/></div>
 
- 
+
 
 ```python
 missing = df_final.loc[(df_final['GROSS_AREA'].isnull())|
@@ -126,7 +126,7 @@ for i in range(len(continuous)):
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/continuous_box.png" alt="3" width="750"/></div>
 <div align="center"><font size="2"><b>Fig 4. Distribution of continuous variables for different crime types</b></font></div>
 
- 
+
 
 ```python
 # Categorical variables

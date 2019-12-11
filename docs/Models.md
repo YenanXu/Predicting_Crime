@@ -21,10 +21,28 @@ header-img: "img/home-bg.jpg"
 
 ## Prediction of Crime Types in Boston Area
 
-For modelling purpose, our data was splitted into train(80%) and test(20%) sets, stratified by crime types. We included here six models, parametric and non-parametric, to address the task of multi-class classification of six different types of criminal misconducts. The models are basic logistic regression, logistic regression optimized by Extra Tree Classifier for feature selections, neural network, decision tree, random forest and boosting.
+For modeling purpose, after excluding all missing values, our data was splitted into train(80%) and test(20%) sets, stratified by crime types. We included here six models, parametric and non-parametric, to address the task of multi-class classification of six different types of criminal misconducts. The models are basic logistic regression, logistic regression optimized by Extra Tree Classifier for feature selections, neural network, decision tree, random forest and boosting.
+
+```python
+pred_col_names = ['SHOOTING_DUMMY', 'HOUR', 'MONTH', 'DAY_OF_WEEK_NUM',
+                  'AV_BLDG', 'AV_TOTAL', 'LAND_SF', 'GROSS_TAX', 'GROSS_AREA', 'LIVING_AREA', 'NUM_FLOORS',
+                  'PTYPE_A', 'PTYPE_C', 'PTYPE_EO', 'PTYPE_EP', 'PTYPE_I', 'PTYPE_MU', 'PTYPE_R', 'YR_BUILT_m', 'YR_REMOD_m',
+                  'Population Density', 'Young_prop', 'Median household income',
+                  'Dist_to_Nearest_Light', 'Lights_within_50m', 'Lights_within_100m']
+# drop missing values
+
+df_model = df_final.dropna(subset = pred_col_names)
+# train-test split
+
+X_train, X_test, y_train, y_test = train_test_split(df_model,
+                                                    df_model.Crime_Type, test_size=0.2,
+                                                    random_state = 8,
+                                                    stratify = df_model.Crime_Type)
+```
+
 <a name="1.1"> </a>
 
-## 1. Baseline (Multiple Logistic Regression Model)
+### 1. Baseline (Multiple Logistic Regression Model)
 The baseline model was fitted using selected variables based on our findings in EDA. The predictors displaying strong correlation with the other predictors (gross area, total assessed building value, lights within 100 meters of the crime scene and median house income) were dropped to prevent multicollinearity. We fitted the model without interaction and polynomial terms. The accuracy scores for the training set and test set are 0.334 and 0.331, respectively.
 
 ```python
@@ -50,12 +68,11 @@ X_test_dum = pd.get_dummies(X_test_scaled.loc[:,pred_col_log], columns=dummies)
 model_logcv = LogisticRegressionCV(multi_class='ovr', cv=5).fit(X_train_dum, y_train)
 
 print('The train set accuracy score of the basic logistic model is :', accuracy_score(y_train.values, model_logcv.predict(X_train_dum)))
-
 print('The test set accuracy score of the basic logistic model is :', accuracy_score(y_test.values, model_logcv.predict(X_test_dum)))
 ```
 <a name="1.2"> </a>
 
-### 1.2 Optimized Logistic Regression Model
+### 2. Optimized Logistic Regression Model
 
 Besides manual selection of explanatory variables, we conducted feature selection by Extra Tree Classifier, in which feature was assessed by the Gini Importance. The most important features are the ones that lead to the highest averaged decrease in node impurity. After applying the classifier, the remaining variables are `YR_BUILT_m`, `Dist_to_Nearest_Light`, `Lights_within_50m`, `Lights_within_100m`, `HOUR_21`, `HOUR_22`, `MONTH_6`, `MONTH_7`, `MONTH_8`, `MONTH_9`, `DAY_OF_WEEK_NUM_1.0`, `DAY_OF_WEEK_NUM_2.0`, `DAY_OF_WEEK_NUM_3.0`, `DAY_OF_WEEK_NUM_4.0`, `DAY_OF_WEEK_NUM_5.0`, `DAY_OF_WEEK_NUM_6.0`. The optimized logistic regression model using these features generated an accuracy score of 0.313 for training set and 0.313 for test set.
 
@@ -85,14 +102,13 @@ Selected_var = X_train_log2.columns[featureSelection.get_support()]
 
 #Fit the logistic model with the selected variables
 
-ovr=LogisticRegressionCV(multi_class = 'ovr', cv=10, max_iter=1000)
 ovr_model=LogisticRegressionCV(multi_class = 'ovr', cv=5).fit(X_train_log2.loc[:,list(Selected_var)],y_train)
 print('The accuracy in training dataset is '+"{}".format(ovr_model.score(X_train_log2.loc[:,list(Selected_var)], y_train)))
 print('The accuracy in testing dataset is '+"{}".format(ovr_model.score(X_test_log2.loc[:,list(Selected_var)], y_test)))
 ```
 <a name="1.3"> </a>
 
-### 1.3 Neural Network
+### 3. Neural Network
 
 Our neural network is consisted of one input layer, three hidden layers and one output layer. The number of nodes per layer is 256, except for the output layer in which 6 nodes were constructed. ReLu was taken as the activation function, and Softmax was used for the output unit since we have a multi-class outcome variable.  Dropout was used in all layers to prevent overfitting, with the fraction of dropout set to be 0.2. We used Adam as the optimizer, and tuned the learning rate to 0.0008 to ensure the model learns across the epochs. Sparse categorical cross-entropy was applied as loss function, with 1000 as the number of epochs, 0.3 as validation set size and 64 as batch size. The final train set accuracy is 0.500, while the final validation set accuracy is 0.485. The test set accuracy using the predicted classes from the neural network is 0.484.
 
@@ -128,6 +144,7 @@ accuracy_score(y_test, nn_model.predict_classes(X_test_scaled.loc[:,pred_col_nam
 ```
 ```python
 #Plot
+
 val_acc = hist.history["val_accuracy"]
 acc = hist.history["accuracy"]
 
@@ -140,12 +157,12 @@ plt.legend()
 
 plt.show()
 ```
-<img src="https://yenanxu.github.io/Predicting_Crime/figures/nn_model.png" alt="4" width="750"/>
+<img src="https://yenanxu.github.io/Predicting_Crime/figures/nn_model.png" alt="4" width="600"/>
 <div align="center"><font size="2"><b>Fig 6. Accuracies across the Epochs in Neural Network</b></font></div>
 
 <a name="1.4"> </a>
 
-### 1.4 Decision tree
+### 4. Decision tree
 
 Individual simple decision trees were constructed using various depths in order to find out an optimized depth. The explanatory variables that are strongly correlated were not dropped from the dataset for modelling as decision trees are immune to multicollinearity. The cross-validation means and standard deviations were then plotted along with train set accuracy for each depth. According to the graph, the tree achieves the highest cross-validation score at depth=46 with no sign of overfitting. We therefore chose depth=46 for our final simple decision tree model. The final train set accuracy is 0.959 and test set accuracy is 0.712.
 
@@ -153,6 +170,7 @@ Individual simple decision trees were constructed using various depths in order 
 #Decision Tree
 
 #Function for finding the best depth and fit the tree with it
+
 def Find_BestTree(X_train, y_train, depths):
     cvmeans = []
     cvstds = []
@@ -170,6 +188,7 @@ def Find_BestTree(X_train, y_train, depths):
     best_depth = depths[cvmeans.index(sorted(cvmeans, reverse=True)[0])]
 
     # Fit a tree with the best depth
+
     tree_best = DecisionTreeClassifier(max_depth=best_depth)
     tree_best.fit(X_train, y_train)
 
@@ -179,12 +198,12 @@ depths = list(range(1, 61))
 best_depth, model_BestTree, cvmeans, cvstds, train_scores= Find_BestTree(X_train.loc[:,pred_col_names], y_train, depths)
 
 print('The accuracy score in the train set of the decision tree with the best depth={} is: {}'.format(best_depth, accuracy_score(y_train.values, model_BestTree.predict(X_train.loc[:,pred_col_names]))))
-
 print('The accuracy score in the test set of the decision tree with the best depth={} is: {}'.format(best_depth, accuracy_score(y_test.values, model_BestTree.predict(X_test.loc[:,pred_col_names]))))
 ```
 
 ```python
 # Plotting means and standard deviations for different depths
+
 plt.figure(figsize=(10, 6))
 plt.fill_between(depths, np.array(cvmeans) + np.array(cvstds), np.array(cvmeans)- np.array(cvstds), alpha=0.5)
 plt.ylabel("Cross Validation Accuracy")
@@ -195,12 +214,12 @@ plt.legend()
 plt.show()
 ```
 
-<div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/decision_tree.png" alt="4" width="750"/><br/></div>
+<div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/decision_tree.png" alt="4" width="600"/><br/></div>
 <div align="center"><font size="2"><b>Fig 7. Change in Accuracies with Various Depths of Simple Decision Tree</b></font></div>
 
 <a name="1.5"> </a>
 
-### 1.5 Random Forest
+### 5. Random Forest
 
 For random forest model, we set the depth to be the best depth found in simple decision trees. By varying the number of trees between 400 to 480, we found that the number of trees giving rise to the highest test set accuracy to be 420. The train set accuracy and test set accuracy under this optimized setting are 0.959 and 0.732.
 
@@ -228,7 +247,7 @@ print('With number of trees = {} and maximum depth = {}, the optimized test set 
 
 <a name="1.6"> </a>
 
-### 1.6 Boosting
+### 6. Boosting
 
 After tuning the parameters, we set the maximum depth to be 15, learning rate to be 0.1 and number of iterations to be 100 for the boosting model. The staged accuracy scores across the iterations for both train and test sets were plotted. From the graph, we might observe that the accuracy score of the test set keeps rising, while the train set accuracy score maintains high, suggesting that the model is not overfitted. The final train set accuracy was 0.956 while the final test set accuracy was 0.736.
 
@@ -246,6 +265,7 @@ staged_boosting_test = list(boost_model.staged_score(X_test.loc[:,pred_col_names
 plt.figure(figsize=(10, 6))
 
 #Plot
+
 plt.ylabel("Accuracy Score")
 plt.xlabel("Number of Iterations")
 plt.plot(range(1,101),
@@ -258,5 +278,5 @@ plt.legend()
 plt.show()
 
 ```
-<div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/boosting.png" alt="4" width="750"/><br/></div>
+<div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/boosting.png" alt="4" width="600"/><br/></div>
 <div align="center"><font size="2"><b>Fig 8. Variation of Accuracy Score across 100 Iterations in Boosting Model</b></font></div>
