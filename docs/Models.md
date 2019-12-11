@@ -21,7 +21,7 @@ header-img: "img/home-bg.jpg"
 
 ## Prediction of Crime Types in Boston Area
 
-For modelling purpose, our data was splitted into train(80%) and test(20%) sets, stratified by crime types. We included here six models, parametric and non-parametric, to address the task of multi-class classification of six different types of criminal misconducts. The models are naive logistic regression, logistic regression optimized by Extra Tree Classifier for feature selections, neural network, decision tree, random forest and boosting.
+For modelling purpose, our data was splitted into train(80%) and test(20%) sets, stratified by crime types. We included here six models, parametric and non-parametric, to address the task of multi-class classification of six different types of criminal misconducts. The models are basic logistic regression, logistic regression optimized by Extra Tree Classifier for feature selections, neural network, decision tree, random forest and boosting.
 <a name="1.1"> </a>
 
 ## 1. Baseline (Multiple Logistic Regression Model)
@@ -141,7 +141,7 @@ plt.legend()
 plt.show()
 ```
 <img src="https://yenanxu.github.io/Predicting_Crime/figures/nn_model.png" alt="4" width="750"/>
-<div align="center"><font size="2"><b>Fig 1. Accuracies across the Epochs in Neural Network</b></font></div>
+<div align="center"><font size="2"><b>Fig 6. Accuracies across the Epochs in Neural Network</b></font></div>
 
 <a name="1.4"> </a>
 
@@ -196,7 +196,7 @@ plt.show()
 ```
 
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/decision_tree.png" alt="4" width="750"/><br/></div>
-<div align="center"><font size="2"><b>Fig 2. Change in Accuracies with Various Depths of Simple Decision Tree</b></font></div>
+<div align="center"><font size="2"><b>Fig 7. Change in Accuracies with Various Depths of Simple Decision Tree</b></font></div>
 
 <a name="1.5"> </a>
 
@@ -259,4 +259,4 @@ plt.show()
 
 ```
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/boosting.png" alt="4" width="750"/><br/></div>
-<div align="center"><font size="2"><b>Fig 3. Variation of Accuracy Score across 100 Iterations in Boosting Model</b></font></div>
+<div align="center"><font size="2"><b>Fig 8. Variation of Accuracy Score across 100 Iterations in Boosting Model</b></font></div>
