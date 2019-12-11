@@ -1,11 +1,11 @@
 ---
 layout: page
-title: "DATA DESCRIPTION AND CLEANING"
-description: "Data Description and cleaning, prepare for EDA"
+title: "DATA CLEANING"
+description: "Datasets description and data cleaning: prepare for EDA"
 header-img: "img/home-bg.jpg"
 ---
 
-## Data Description
+## Datasets
 
 Data of this project was extracted from the following datasets:
 1. [Crime Incident Reports Dataset](https://data.boston.gov/dataset/crime-incident-reports-august-2015-to-date-source-new-system) provided by Boston Police Department(BPD)
@@ -45,6 +45,7 @@ The _Crime Incident Reports Dataset_ and the _Property Assessment Dataset_ were 
 
 ```python
 # Check the distribution of crime types for matched and unmatched observations
+
 fig, ax = plt.subplots(1,1, figsize=(12,8))
 
 unmatched = df_merge_CP[df_merge_CP['ZIPCODE'].isnull()]['Crime_Type']
@@ -60,5 +61,5 @@ ax.set_xlabel('Crime Type')
 ax.set_ylabel('Number of Incidents');
 ```
 
-<img src="https://yenanxu.github.io/Predicting_Crime/figures/matched.png" alt="2" width="600"/>
+<div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/matched.png" alt="2" width="600"/></div>
 <div align="center"><font size="2"><b>Fig 1. Distribution of crime types for matched and unmatched observations</b></font></div>
