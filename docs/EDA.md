@@ -11,7 +11,7 @@ Exploratory data analysis were performed to give a general idea on which variabl
 The response variable in our project is the categorical variable `Crime Type`. Each crime type was labeled by a different number, with theft as 0, robbery as 1, assault as 2, vandalism as 3, motor/vehicle accident as 4 and drug abuse violations as 5. All the variables that might potentially be predictors are listed.
 
 <div align="center"><font size="2"><b>Table 1. Potential predictors for models in the final dataset</b></font></div>
-<div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/variable_description.png" alt="1" width="750"/></div>
+<div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/variable_description.png" alt="1" width="700"/></div>
 
 ## Missing values
 The variables that could potentiall be predictors were selected by excluding descriptive variables. The counts and distribution of missing values in these potential predictors were checked to decide the right way to handle missing. Table 2. shows that 7 out of 26 variables had missing values, which accounted for only no more than 3%. The distribution of crime types for missing and unmissing data was also found to be similar (Fig 1.), so we decided to drop all the missings in predictors used for models.
