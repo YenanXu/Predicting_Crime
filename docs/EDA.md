@@ -14,7 +14,7 @@ The response variable in our project is the categorical variable `Crime Type`. E
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/variable_description.png" alt="1" width="500"/></div>
 
 ## Missing values
-The variables that could potentiall be predictors were selected by excluding descriptive variables. The counts and distribution of missing values in these potential predictors were checked to decide the right way to handle missing. Table 2. shows that 7 out of 26 variables had missing values, which accounted for only no more than 3%. The distribution of crime types for missing and unmissing data was also found to be similar (Fig 1.), so we decided to drop all the missings in predictors used for models.
+The variables that could potentiall be predictors were selected by excluding descriptive variables. The counts and distribution of missing values in these potential predictors were checked to decide the right way to handle missing. Table 2. shows that 7 out of 26 variables had missing values, which accounted for only no more than 3%. The distribution of crime types for missing and unmissing data was also found to be similar (Fig 2), so we decided to drop all the missings in predictors used for models.
 
 ```python
 # Variables to be be checked
@@ -68,11 +68,11 @@ ax.set_ylabel('Density of Incidents');
 ```
 
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/missing.png" alt="3" width="600"/></div>
-<div align="center"><font size="2"><b>Fig 1. Distribution of crime types for missing and unmissing observations</b></font></div>
+<div align="center"><font size="2"><b>Fig 2. Distribution of crime types for missing and unmissing observations</b></font></div>
 
 ## Correlation Analysis
 
-The potential predictors were then explored by looking at the correlation matrix which excluded missing values. `AV_BLDG` and `AV_TOTAL`, `Young_prop` and `Median household income`, `GROSS_AREA` and `LIVING_AREA`, `Lights_within_50m` and `Lights_within_100m`, either two `PTYPE`s were found to have high correlation that might induce issue of colinearity in some models.
+The potential predictors were then explored by looking at the correlation matrix which excluded missing values (Fig 3). `AV_BLDG` and `AV_TOTAL`, `Young_prop` and `Median household income`, `GROSS_AREA` and `LIVING_AREA`, `Lights_within_50m` and `Lights_within_100m`, either two `PTYPE`s were found to have high correlation that might induce issue of colinearity in some models.
 
 ```python
 # Correlation Analysis of Variables
@@ -84,13 +84,13 @@ sns.heatmap(corr, vmin=-1, vmax=1, mask=np.zeros_like(corr, dtype=np.bool), cmap
 ```
 
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/correlation.png" alt="4" width="600"/></div>
-<div align="center"><font size="2"><b>Fig 2. Correlation matrix excluding missing values</b></font></div>
+<div align="center"><font size="2"><b>Fig 3. Correlation matrix excluding missing values</b></font></div>
 
 ## Variables Distribution for Different Crime Types
 
-The boxplots (Fig. 3) show the distributions of continuous variables for different crime types, some variables were log transformed to make the plot more readable. All the continuous variables could potentially be important in model predicting, especially for those with high distribution variation across different crime types, such as `PTYPE_EP`, `Young_prop`, `Lights_within_50m`, etc.
+The boxplots (Fig 4) show the distributions of continuous variables for different crime types, some variables were log transformed to make the plot more readable. All the continuous variables could potentially be important in model predicting, especially for those with high distribution variation across different crime types, such as `PTYPE_EP`, `Young_prop`, `Lights_within_50m`, etc.
 
-The histograms (Fig. 3) show the distributions of categorical variables for different crime types. `SHOOTING_DUMMY` and `HOUR` were found to have big difference across different crime types, while `MONTH` and `DAY_OF_WEEK_NUM` had less difference.
+The histograms (Fig 5) show the distributions of categorical variables for different crime types. `SHOOTING_DUMMY` and `HOUR` were found to have big difference across different crime types, while `MONTH` and `DAY_OF_WEEK_NUM` had less difference.
 
 ```python
 # Correlation between crime type and other variables
@@ -124,7 +124,7 @@ for i in range(len(continuous)):
 ```
 
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/continuous_box.png" alt="3" width="750"/></div>
-<div align="center"><font size="2"><b>Fig 3. Distribution of continuous variables for different crime types</b></font></div>
+<div align="center"><font size="2"><b>Fig 4. Distribution of continuous variables for different crime types</b></font></div>
 
  
 
@@ -156,7 +156,7 @@ ax[3].set_xticklabels(labels=['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
 ```
 
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/categorical_hist.png" alt="5" width="750"/></div>
-<div align="center"><font size="2"><b>Fig 4. Distribution of categorical variables for different crime types</b></font></div>
+<div align="center"><font size="2"><b>Fig 5. Distribution of categorical variables for different crime types</b></font></div>
 
 
 ## Variables Selection
