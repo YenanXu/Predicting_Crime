@@ -1,14 +1,14 @@
 ---
 layout: page
 title: "Models"
-description: "Classification Models for Crime Types"
+description: "Classification models for crime types"
 header-img: "img/home-bg.jpg"
 ---
 
 # Contents
 
 <a href="#1."> Models to Predict Crime Types in Boston Area</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#1.1">1. Baseline (Multiple Logistic Regression model)</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#1.1">1. Baseline (Multiple Logistic Regression Model)</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#1.2">2. Optimized Logistic Regression Model</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#1.3">3. Neural Network</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#1.4">4. Decision Tree</a><br/>
@@ -50,6 +50,11 @@ The baseline model was fitted using selected variables based on our findings in 
 
 #Standardize
 
+continuous = ['AV_BLDG', 'AV_TOTAL', 'LAND_SF', 'GROSS_TAX', 'GROSS_AREA', 'LIVING_AREA', 'NUM_FLOORS',
+              'PTYPE_A', 'PTYPE_C', 'PTYPE_EO', 'PTYPE_EP', 'PTYPE_I', 'PTYPE_MU', 'PTYPE_R', 'YR_BUILT_m', 'YR_REMOD_m',
+              'Population Density', 'Young_prop', 'Median household income',
+              'Dist_to_Nearest_Light', 'Lights_within_50m', 'Lights_within_100m']
+
 scaler = StandardScaler()
 
 X_train_scaled = X_train.copy()
@@ -58,10 +63,9 @@ X_train_scaled[continuous] = scaler.fit_transform(X_train_scaled[continuous])
 X_test_scaled = X_test.copy()
 X_test_scaled[continuous] = scaler.transform(X_test_scaled[continuous])
 
-dummies = ['HOUR', 'MONTH', 'DAY_OF_WEEK_NUM']
-
 #Turn hour, month and day of week into dummy variables
 
+dummies = ['HOUR', 'MONTH', 'DAY_OF_WEEK_NUM']
 X_train_dum = pd.get_dummies(X_train_scaled.loc[:,pred_col_log], columns=dummies)
 X_test_dum = pd.get_dummies(X_test_scaled.loc[:,pred_col_log], columns=dummies)
 
@@ -78,12 +82,6 @@ Besides manual selection of explanatory variables, we conducted feature selectio
 
 ```python
 # Variables to be be checked
-
-pred_col_names = ['SHOOTING_DUMMY', 'HOUR', 'MONTH', 'DAY_OF_WEEK_NUM',
-                  'AV_BLDG', 'AV_TOTAL', 'LAND_SF', 'GROSS_TAX', 'GROSS_AREA', 'LIVING_AREA', 'NUM_FLOORS',
-                  'PTYPE_A', 'PTYPE_C', 'PTYPE_EO', 'PTYPE_EP', 'PTYPE_I', 'PTYPE_MU', 'PTYPE_R', 'YR_BUILT_m', 'YR_REMOD_m',
-                  'Population Density', 'Young_prop', 'Median household income',
-                  'Dist_to_Nearest_Light', 'Lights_within_50m', 'Lights_within_100m']
 
 X_train_log2 = pd.get_dummies(X_train_scaled.loc[:,pred_col_names], columns=dummies,drop_first=True)
 X_test_log2 = pd.get_dummies(X_test_scaled.loc[:,pred_col_names], columns=dummies,drop_first=True)
@@ -157,7 +155,7 @@ plt.legend()
 
 plt.show()
 ```
-<img src="https://yenanxu.github.io/Predicting_Crime/figures/nn_model.png" alt="4" width="600"/>
+<div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/nn_model.png" alt="4" width="600"/></div>
 <div align="center"><font size="2"><b>Fig 6. Accuracies across the Epochs in Neural Network</b></font></div>
 
 <a name="1.4"> </a>
@@ -261,10 +259,12 @@ boost_model.fit(X_train.loc[:,pred_col_names], y_train)
 
 staged_boosting_training = list(boost_model.staged_score(X_train.loc[:,pred_col_names], y_train))
 staged_boosting_test = list(boost_model.staged_score(X_test.loc[:,pred_col_names], y_test))
+```
+
+```python
+#Plot
 
 plt.figure(figsize=(10, 6))
-
-#Plot
 
 plt.ylabel("Accuracy Score")
 plt.xlabel("Number of Iterations")
@@ -276,7 +276,7 @@ plt.plot(range(1,101),
          'r-', label = "Test set performance")
 plt.legend()
 plt.show()
-
 ```
+
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/boosting.png" alt="4" width="600"/><br/></div>
 <div align="center"><font size="2"><b>Fig 8. Variation of Accuracy Score across 100 Iterations in Boosting Model</b></font></div>
