@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Predicting Types of Crime"
+title: "Predicting Crime Types in Boston Area"
 description: "Aiming for a safer city"
 header-img: "img/home-bg.jpg"
 ---
