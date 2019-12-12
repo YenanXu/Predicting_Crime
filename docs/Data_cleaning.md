@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Data CLeaning"
+title: "Data Cleaning"
 description: "Datasets description and data cleaning: prepare for EDA"
 header-img: "img/home-bg.jpg"
 ---
