@@ -7,13 +7,13 @@ header-img: "img/home-bg.jpg"
 
 Exploratory data analysis were performed to give a general idea on which variable would potentially be significant in model predicting. Missing values analysis and correlation analysis were also conducted to help with variables selection.
 
-## Variables Description
+# Variables Description
 The response variable in our project is the categorical variable `Crime Type`. Each crime type was labeled by a different number, with theft as 0, robbery as 1, assault as 2, vandalism as 3, motor/vehicle accident as 4 and drug abuse violations as 5. All the variables that might potentially be predictors are listed in Table 1.
 
 <div align="center"><font size="2"><b>Table 1. Potential predictors for models in the final dataset</b></font></div>
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/variable_description.png" alt="1" width="500"/></div>
 
-## Missing values
+# Missing values
 The variables that could potentiall be predictors were selected by excluding descriptive variables. The counts and distribution of missing values in these potential predictors were checked to decide the right way to handle missing. Table 2. shows that 7 out of 26 variables had missing values, which accounted for only no more than 3%. The distribution of crime types for missing and unmissing data was also found to be similar (Fig 2), so we decided to drop all the missings in predictors used for models.
 
 ```python
@@ -70,7 +70,7 @@ ax.set_ylabel('Density of Incidents');
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/missing.png" alt="3" width="600"/></div>
 <div align="center"><font size="2"><b>Fig 2. Distribution of crime types for missing and unmissing observations</b></font></div>
 
-## Correlation Analysis
+# Correlation Analysis
 
 The potential predictors were then explored by looking at the correlation matrix which excluded missing values (Fig 3). `AV_BLDG` and `AV_TOTAL`, `Young_prop` and `Median household income`, `GROSS_AREA` and `LIVING_AREA`, `Lights_within_50m` and `Lights_within_100m`, either two `PTYPE`s were found to have high correlation that might induce issue of colinearity in some models.
 
@@ -86,7 +86,7 @@ sns.heatmap(corr, vmin=-1, vmax=1, mask=np.zeros_like(corr, dtype=np.bool), cmap
 <div align="center"><img src="https://yenanxu.github.io/Predicting_Crime/figures/correlation.png" alt="4" width="600"/></div>
 <div align="center"><font size="2"><b>Fig 3. Correlation matrix excluding missing values</b></font></div>
 
-## Variables Distribution for Different Crime Types
+# Variables Distribution for Different Crime Types
 
 The boxplots (Fig 4) show the distributions of continuous variables for different crime types, some variables were log transformed to make the plot more readable. All the continuous variables could potentially be important in model predicting, especially for those with high distribution variation across different crime types, such as `PTYPE_EP`, `Young_prop`, `Lights_within_50m`, etc.
 
@@ -159,5 +159,5 @@ ax[3].set_xticklabels(labels=['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
 <div align="center"><font size="2"><b>Fig 5. Distribution of categorical variables for different crime types</b></font></div>
 
 
-## Variables Selection
+# Variables Selection
 Considering the small size of missing value and its similar crime types distribution as data without missing values, all the variables with missing values were kept and only observations with missing values were dropped. For logistic regression, we decided to drop `AV_BLDG`, `Median household income`, `GROSS_AREA` and `Lights_within_100m` based on the missing values analysis and correlation analysis we conducted. No variable was dropped in ANN, Decision Tree, Random Forest and Boosting.

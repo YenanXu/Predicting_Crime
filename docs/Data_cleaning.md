@@ -5,7 +5,7 @@ description: "Datasets description and data cleaning: prepare for EDA"
 header-img: "img/home-bg.jpg"
 ---
 
-## Datasets
+# Datasets
 
 Data of this project was extracted from the following datasets:
 1. [**Crime Incident Reports Dataset**](https://data.boston.gov/dataset/crime-incident-reports-august-2015-to-date-source-new-system) provided by Boston Police Department(BPD)
@@ -18,7 +18,7 @@ Data of this project was extracted from the following datasets:
 - Selected economic statistics from Census 2010 ZIP Code Tabulation Area Demographic Profile Summary File. Variables include ZIP code, Total population, Population density, Population by female, Population by age, median household income which represents district socioeconomic status.
 
 
-## Data Cleaning
+# Data Cleaning
 
 In this part, the location data provided in four datasets will be associated using geospatial labels such as zipcodes, street names and coordinates.
 
@@ -30,7 +30,7 @@ The _Property Assessment Dataset_ was first explored on missing values. Observat
 
 #### Street Lights Dataset
 From the streetlight locations provided by _The Street Lighting Division of Public Works_, we extracted the geographic coordinates of the lights across Boston. Since the same geographic information can be obtained from the crime incident reports, the **Haversine equation** can be applied to calculate the distance between every single place of crime occurrence and streetlight location.
-- Haversine formula: 
+- Haversine formula:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$d=2{r}\cdot{sin}\lgroup {\sqrt{(sin^2(\frac{\phi_2-\phi_1}{2})+cos⁡(\phi_1)cos⁡(\phi_2)sin^2(\frac{\lambda_2-\lambda_1}{2}))}}\rgroup$
 
