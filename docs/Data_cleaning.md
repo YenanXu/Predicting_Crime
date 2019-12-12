@@ -8,13 +8,13 @@ header-img: "img/home-bg.jpg"
 ## Datasets
 
 Data of this project was extracted from the following datasets:
-1. [Crime Incident Reports Dataset](https://data.boston.gov/dataset/crime-incident-reports-august-2015-to-date-source-new-system) provided by Boston Police Department(BPD)
+1. [**Crime Incident Reports Dataset**](https://data.boston.gov/dataset/crime-incident-reports-august-2015-to-date-source-new-system) provided by Boston Police Department(BPD)
 - The 2015 Crime incident datasets is 77 Mb with 440,045 observation and 17 columns. This dataset captures important information about crime type, location, time, etc.
-2. [Property Assessment Dataset](https://data.boston.gov/dataset/property-assessment) that gives property, or parcel, ownership together with value information in Boston, published by the Department of Innovation and Technology.
+2. [**Property Assessment Dataset**](https://data.boston.gov/dataset/property-assessment) that gives property, or parcel, ownership together with value information in Boston, published by the Department of Innovation and Technology.
 - The 2019 (fiscal year) Property Assessment Dataset is 44 Mb with 174,668 observations and 75 columns, including information about address, property type, value, area and other details.
 - Variables description is provided on _Analyze Boston_
-3. [Street Lights Dataset](https://data.boston.gov/dataset/streetlight-locations) maintained by The Street Lighting Division of Public Works
-4. [Census ZIP Code Demographic Profile Dataset](https://www.nber.org/data/census-2010-zip-code-data.html)
+3. [**Street Lights Dataset**](https://data.boston.gov/dataset/streetlight-locations) maintained by The Street Lighting Division of Public Works
+4. [**Census ZIP Code Demographic Profile Dataset**](https://www.nber.org/data/census-2010-zip-code-data.html)
 - Selected economic statistics from Census 2010 ZIP Code Tabulation Area Demographic Profile Summary File. Variables include ZIP code, Total population, Population density, Population by female, Population by age, median household income which represents district socioeconomic status.
 
 
