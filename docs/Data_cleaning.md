@@ -32,9 +32,7 @@ The _Property Assessment Dataset_ was first explored on missing values. Observat
 From the streetlight locations provided by _The Street Lighting Division of Public Works_, we extracted the geographic coordinates of the lights across Boston. Since the same geographic information can be obtained from the crime incident reports, the **Haversine equation** can be applied to calculate the distance between every single place of crime occurrence and streetlight location.
 - Haversine formula: 
 
-$d=2{r}\cdot{sin}\lgroup {\sqrt{(sin^2(\frac{\phi_2-\phi_1}{2})+cos⁡(ϕ_1)cos⁡(ϕ_2)sin^2(\frac{\lambda_2-\lambda_1}{2}))}}\rgroup$
-
-<img src="https://yenanxu.github.io/Predicting_Crime/figures/H_formula.jpg" alt="1" width="400"/>
+$d=2{r}\cdot{sin}\lgroup {\sqrt{(sin^2(\frac{\phi_2-\phi_1}{2})+cos⁡(\phi_1)cos⁡(\phi_2)sin^2(\frac{\lambda_2-\lambda_1}{2}))}}\rgroup$
 
 Where $\phi$ represents latitude, $\lambda$ represents longitude and the subscript marks the location.
 
